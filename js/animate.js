@@ -126,18 +126,16 @@ proto.positionSlider = function() {
   x = x + this.cursorPosition;
 
   // reverse if right-to-left and using transform
-  x = this.options.rightToLeft && transformProperty ? -x : x;
+  x = this.options.rightToLeft ? -x : x;
 
   var value = this.getPositionValue( x );
 
-  if ( transformProperty ) {
-    // use 3D tranforms for hardware acceleration on iOS
-    // but use 2D when settled, for better font-rendering
-    this.slider.style[ transformProperty ] = is3d && this.isAnimating ?
-      'translate3d(' + value + ',0,0)' : 'translateX(' + value + ')';
-  } else {
-    this.slider.style[ this.originSide ] = value;
-  }
+  // use 3D tranforms for hardware acceleration on iOS
+  // but use 2D when settled, for better font-rendering
+  var style = is3d && this.isAnimating ?
+  'translate3d(' + value + ',0,0)' : 'translateX(' + value + ')';
+  this.slider.style[ '-webkit-transform' ] = style;
+  this.slider.style[ 'transform' ] = style;
 };
 
 proto.positionSliderAtSelected = function() {
